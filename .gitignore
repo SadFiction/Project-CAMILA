@@ -10,7 +10,7 @@ target/
 *.pdb
 
 #remove config files
-.GUI\Godot_v4.4-stable_win64.exe
+.GUI/Godot_v4.4-stable_win64.exe/
 .vscode/
 
 # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
