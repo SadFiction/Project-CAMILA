@@ -1,0 +1,20 @@
+syntax = "proto3";
+package CAMILA; 
+
+// Simple rpc method
+
+enum Status{
+    RECEIVED = 0;
+}
+
+message text{
+    string text = 1;
+}
+
+message status{
+    Status status = 1;
+}
+
+service Message {
+    rpc SendMessage(text) returns (status){}
+}
