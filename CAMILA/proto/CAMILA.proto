@@ -3,8 +3,10 @@ package CAMILA;
 
 // Simple rpc method
 
+
 enum Status{
     RECEIVED = 0;
+    NILL = 1;
 }
 
 message text{
@@ -14,6 +16,7 @@ message text{
 message status{
     Status status = 1;
 }
+
 
 service Message {
     rpc SendMessage(text) returns (status){}

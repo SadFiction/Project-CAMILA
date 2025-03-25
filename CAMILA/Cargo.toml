@@ -10,3 +10,11 @@ protoc = "2.28.0"
 
 [build-dependencies]
 tonic-build = "*"
+
+[lib]
+name = "CAMILAlib"
+path = "src/lib/CAMILAlib.rs"
+
+[[bin]]
+name = "CAMILAserver"
+path = "src/bin/CAMILAserver.rs"
