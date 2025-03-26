@@ -4,12 +4,13 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-tonic = "0.12.3"
-tokio = {version = "1.44.1", features = ["full"]}
-protoc = "2.28.0"
+tonic = "0.11"
+tokio = {version = "1", features = ["full"]}
+prost = "0.12"
+tonic-reflection = "0.11"
 
 [build-dependencies]
-tonic-build = "*"
+tonic-build = "0.11"
 
 [lib]
 name = "CAMILAlib"

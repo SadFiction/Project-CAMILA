@@ -1,5 +1,5 @@
 syntax = "proto3";
-package CAMILA; 
+package camilaproto; 
 
 // Simple rpc method
 
@@ -13,11 +13,11 @@ message text{
     string text = 1;
 }
 
-message status{
+message stat{
     Status status = 1;
 }
 
 
 service Message {
-    rpc SendMessage(text) returns (status){}
+    rpc SendMessage(text) returns (stat){}
 }
