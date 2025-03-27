@@ -1,30 +1,7 @@
-
-
-
 use tonic::transport::Server;
 use CAMILAlib;
 
-
-
-
 #[tokio::main]
-async fn main() -> Result<(), Error>{
-
-    const addr = "[::1]:50051".parse?;
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-/*#[tokio::main]
 async fn main(){
     let addr = "[::1]:50051".parse().unwrap();
 
@@ -40,5 +17,3 @@ async fn main(){
     .await.unwrap();
 
 }
-
-*/

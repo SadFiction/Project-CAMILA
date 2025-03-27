@@ -1,23 +1,35 @@
 syntax = "proto3";
-package camilaproto; 
+package CAMILA; 
 
 // Simple rpc method
 
 
-enum Status{
-    RECEIVED = 0;
-    NILL = 1;
+
+//Comand Type of the COMMAND
+enum COMMAND_TYPE{
+    SET_CAMILA_OBJECT = 0;
+    GET_CAMILA_OBJECT = 1;
+
 }
 
-message text{
-    string text = 1;
+enum COMMAND_STATUS{
+    NONE = 0;
+    ON_STACK = 1;
+    
 }
 
-message stat{
-    Status status = 1;
+message Command{
+    COMMAND_TYPE type = 1;
+    repeated string arguments = 2;    
+}
+
+message Status{
+    COMMAND_STATUS status = 0;
 }
 
 
-service Message {
-    rpc SendMessage(text) returns (stat){}
+service Commands{
+    rpc SendCommandTick(Command) returns (Status);
 }
+
+

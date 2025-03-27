@@ -1,19 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
 pub use proto::{message_server::{Message, MessageServer}, Status};
 
 pub use tonic::transport::Server;
@@ -48,5 +32,3 @@ impl  Message for MessageService{
 
     }
 }
-
-*/
