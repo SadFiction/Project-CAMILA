@@ -1,35 +1,236 @@
 syntax = "proto3";
 package CAMILA; 
 
-// Simple rpc method
 
 
+message COB{
 
-//Comand Type of the COMMAND
-enum COMMAND_TYPE{
-    SET_CAMILA_OBJECT = 0;
-    GET_CAMILA_OBJECT = 1;
+    repeated Tick ticks = 7;
 
+    uint32 current_tick = 8;
+    uint32 number_ticks = 9;
+
+    uint32 number_nodes = 23;
+    uint32 number_input_nodes = 24;
+    uint32 number_output_nodes = 25;
+    uint32 number_edges = 26;
+
+    message Tick{
+        Grid grid = 29;
+        Network network = 30;
+
+        message Grid{
+            Size_Of_Grid size_of_grid = 27;
+            Grid grid = 28; 
+
+            message Size_Of_Grid{
+                float size_x = 1;
+                float size_y = 2;
+            }
+
+            message Cell{
+                float structure_layer = 3;
+                float  transmission_layer = 4;
+            }
+
+            message Rows{
+                repeated Cell collumns = 5;
+            }
+
+            message Grid{
+                repeated Rows rows = 6;
+            }
+        }
+
+        message Network{
+            repeated Edge edges = 17;
+            repeated MutableNode nodes = 18;
+            repeated ImutableNode input_nodes = 21;
+            repeated ImutableNode output_nodes = 22;
+
+
+            message Coordinate{
+                uint64 x = 10;
+                uint64 y = 11;
+            }
+
+            message Edge{
+                Coordinate start = 12;
+                Coordinate end = 13;
+                float weight = 14;
+            }
+
+            message MutableNode{
+                Coordinate position = 15;
+                float activation_coefficient = 16;
+            }
+
+            message ImutableNode{
+                Coordinate position = 19;
+                string tag = 20;
+            }
+        }
+    }
 }
 
-enum COMMAND_STATUS{
-    NONE = 0;
-    ON_STACK = 1;
+message IOS{
+    message InputSet{
+            map<string, float> set = 1;
+    }
+
+    message OutputSet{
+        map<string, float> set = 1;
+    }
+}
+
+
+message CamilaCommand{
+    enum CommandType{
+        SET_CAMILA_OBJECT = 0;
+        GET_CAMILA_OBJECT = 1;
+        TICK_SET = 2;
+        TICK_GET = 3;
+        INPUT_SEND = 4;
+        INPUT_SERIES_SEND = 5;
+        GET_OUTPUT = 6;
+        GET_OUTPUT_SERIES = 7;
+        REWARD = 8;
+        RULESET_SET = 9;
+        RULESET_GET = 10;
+        
+    }
+
+    enum CommandStatus{
+        NONE = 0;
+        ARGUMENT_CONTENTS_INVALID = 1;
+        ARGUMENT_KEY_INVALID = 2;
+        ARGUMENT_NULL = 3;
+        QUEUE_FILLED = 4;
+        QUEUE_FULL_CANNOT_PUSH = 5;
+        ON_QUEUE = 6;
+        CURRENTLY_UNAVAILABLE = 7;
     
+    }
+
+
+    message Command{
+        CommandType type = 1;
+        map<string, ArgType> arguments = 2;
+        uint64 command_ID =3;
+    }
+
+
+    message Status{
+        CommandStatus status = 1;
+    }
+
+
+    message ArgType{
+        oneof arg_type{
+            COB.Tick.Network.Coordinate coordinate = 1;
+            COB.Tick.Network.Edge edge = 2;
+            COB.Tick.Network.MutableNode mutable_node = 3;
+            COB.Tick tick= 8;
+            IOS.InputSet input_set = 9;
+            string string_type = 4;
+            int64 integer_type = 5;
+            float float_type = 6;
+            bool boolean_type = 7;
+        }
+    }
+
 }
 
-message Command{
-    COMMAND_TYPE type = 1;
-    repeated string arguments = 2;    
+
+service CamilaCommands{
+    rpc SendCommandTick(CamilaCommand.Command) returns (CamilaCommand.Status);
+    rpc SendCommandCycle(CamilaCommand.Command) returns (CamilaCommand.Status);
+
+    rpc SendCommandSeriesTick(stream CamilaCommand.Command) returns (stream CamilaCommand.Status);
+    rpc SendCommandSeriesCycle(stream CamilaCommand.Command) returns (stream CamilaCommand.Status);
+
+    rpc SendCommandQueueIndependent(CamilaCommand.Command) returns (CamilaCommand.Status);
+    rpc SendCommandSeriesQueueIndependent(stream CamilaCommand.Command) returns (stream CamilaCommand.Status);
 }
 
-message Status{
-    COMMAND_STATUS status = 0;
+
+
+
+message CamilaResponse{
+    message SortsBy{
+        message Empty{
+
+        }
+        
+        message IDs{
+            repeated uint64 ID = 1;
+        }
+        
+        message Types{
+            repeated ResponseType type = 1;
+        }
+        
+        message Time{
+            uint64 start_time_milli = 1;
+            uint64 end_time_milli = 2;
+        }
+
+    }
+
+    enum ResponseType{
+        NONE = 0;
+        INFO = 1;
+        ERROR = 2;
+        DATA = 3;
+        WARNING = 4;
+    
+    }
+
+    enum ResponseStatus{
+        QUEUE_EMPTY =0;
+        NOT_FOUND = 1; 
+    }
+
+    message ReturnValue {
+        oneof return_type{
+            COB.Tick.Network.Coordinate coordinate = 1;
+            COB.Tick.Network.Edge edge = 2;
+            COB.Tick.Network.MutableNode mutable_node = 3;
+            COB.Tick tick= 8;
+            IOS.InputSet output_set = 9;
+            string string_type = 4;
+            int64 integer_type = 5;
+            float float_type = 6;
+            bool boolean_type = 7;
+        }
+    }
+
+    message Output{
+        uint64 time_milli = 1;
+        ResponseType type = 2;
+        optional uint64 responds_to_ID = 3;
+        map <string, ReturnValue> messages= 4;
+    }
+
+
+    message Response{
+       oneof success{
+            Output output = 1;
+            ResponseStatus status = 2;
+       }
+        
+    }
+
 }
 
 
-service Commands{
-    rpc SendCommandTick(Command) returns (Status);
+
+
+service CamilaGetResponse{
+    rpc PopResponseFromQueue(CamilaResponse.SortsBy.Empty) returns (CamilaResponse.Response); 
+    rpc AllResponseQueue(CamilaResponse.SortsBy.Empty) returns (stream CamilaResponse.Response);
+
+    rpc ResponsesFromIDs(CamilaResponse.SortsBy.IDs) returns (stream CamilaResponse.Response);
+    rpc ResponsesFromTypes(CamilaResponse.SortsBy.Types) returns (stream CamilaResponse.Response);
+    rpc ResponsesFromTime(CamilaResponse.SortsBy.Time) returns (stream CamilaResponse.Response);
 }
-
-
