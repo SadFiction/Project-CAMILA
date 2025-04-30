@@ -1,12 +1,44 @@
+
+use tokio::sync::mpsc;
+use std::time::Duration;
 use std::{error::Error, net::SocketAddr};
 
+use tokio::time::sleep;
 use tonic::transport::Server;
 use CAMILAlib::*;
 use CAMILAlib::{camila_command_service_mod, camila_get_response_service_mod};
 
 
+
+async fn tick_signal(tx: mpsc::Sender<bool>,tick_speed: u64) -> () {
+    let tick_speed = if tick_speed < 1000 {1000-tick_speed} else {1};
+
+    loop {
+        
+        sleep(Duration::from_millis(tick_speed)).await;
+        tx.send(true).await.expect("tx message");
+    }
+}
+  
+async fn main_loop(mut rx: mpsc::Receiver<bool>) -> (){
+
+    loop {
+        if !TICK_COMMAND_QUEUE.lock().await.is_empty() {
+
+            //Work on grid
+        }
+
+        if let Some(status) = rx.recv().await {
+            //Update 
+        }
+    }
+}
+
+
+
+
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>>{
+async fn main() -> Result<(), Box<dyn std::error::Error>>{
     
     let addr: SocketAddr = "[::1]:50051".parse()?;
     let service_1: camila_command_service_mod::CamilaCommandService = camila_command_service_mod::CamilaCommandService::default();
@@ -21,6 +53,11 @@ async fn main() -> Result<(), Box<dyn Error>>{
         .add_service(descriptor)
         .serve(addr)
         .await?;
+    
+    let (tx, mut rx) : (mpsc::Sender<bool>, mpsc::Receiver<bool>) = mpsc::channel(0);
+
+    tokio::join!(tick_signal(tx, 1000), main_loop(rx));
+
     Ok(())
 
 }

@@ -35,11 +35,11 @@ pub mod camila_get_response_service_mod;
 
 const TEMP_QUEUE_SIZE: usize = 100;
 
-static CYCLE_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Command>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
-static TICK_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Command>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
-static INDEPENDENT_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Command>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
+pub static CYCLE_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Command>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
+pub static TICK_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Command>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
+pub static INDEPENDENT_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Command>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
 
-static LOG_QUEUE: Lazy<Arc<Mutex<Queue<camila_response::Response>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
+pub static LOG_QUEUE: Lazy<Arc<Mutex<Queue<camila_response::Response>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
 
 
 pub trait QueueTypes{}
@@ -61,7 +61,9 @@ impl<T:QueueTypes> Queue<T>{
              queue: Vec::with_capacity(max_size)}
     }
 
-
+    pub fn is_empty(&self) -> bool{
+        self.queue_size == 0
+    }
 
     pub async fn push_queue(&mut self, command: T) -> Result<(), &str>{
         

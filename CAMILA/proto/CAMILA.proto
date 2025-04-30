@@ -172,7 +172,7 @@ message CamilaResponse{
         }
         
         message Time{
-            repeated uint64 start_time_milli = 1;
+             uint64 start_time_milli = 1;
             uint64 end_time_milli = 2;
         }
 
