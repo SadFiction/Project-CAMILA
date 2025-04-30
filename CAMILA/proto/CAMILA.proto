@@ -10,10 +10,7 @@ message COB{
     uint32 current_tick = 8;
     uint32 number_ticks = 9;
 
-    uint32 number_nodes = 23;
-    uint32 number_input_nodes = 24;
-    uint32 number_output_nodes = 25;
-    uint32 number_edges = 26;
+   
 
     message Tick{
         Grid grid = 29;
@@ -47,6 +44,11 @@ message COB{
             repeated MutableNode nodes = 18;
             repeated ImutableNode input_nodes = 21;
             repeated ImutableNode output_nodes = 22;
+
+            uint32 number_nodes = 23;
+            uint32 number_input_nodes = 24;
+            uint32 number_output_nodes = 25;
+            uint32 number_edges = 26;
 
 
             message Coordinate{
@@ -88,8 +90,10 @@ message CamilaCommand{
     enum CommandType{
         SET_CAMILA_OBJECT = 0;
         GET_CAMILA_OBJECT = 1;
+
         TICK_SET = 2;
         TICK_GET = 3;
+
         INPUT_SEND = 4;
         INPUT_SERIES_SEND = 5;
         GET_OUTPUT = 6;
@@ -153,9 +157,6 @@ service CamilaCommands{
     rpc SendCommandSeriesQueueIndependent(stream CamilaCommand.Command) returns (stream CamilaCommand.Status);
 }
 
-
-
-
 message CamilaResponse{
     message SortsBy{
         message Empty{
@@ -171,7 +172,7 @@ message CamilaResponse{
         }
         
         message Time{
-            uint64 start_time_milli = 1;
+            repeated uint64 start_time_milli = 1;
             uint64 end_time_milli = 2;
         }
 

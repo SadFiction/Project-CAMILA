@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" 
+     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Tauri App</title>
+    <script type="module" src="/src/main.ts" defer></script>
+
+  </head>
+
+  <body >
+    <div class="menu__overlay">
+      <a>
+        New File
+      </a>
+      <a>
+        Open File
+      </a>
+      <a>
+        Save File
+      </a>
+
+    </div>
+
+    <div class="zoom_menu">
+      <div id="zoom_in" class="square__placeholder down">
+        <span class="material-symbols-outlined">
+          zoom_out
+          </span>
+      </div>
+      <div id="zoom_out" class="square__placeholder down">
+        <span class="material-symbols-outlined">
+          zoom_in
+          </span>
+      </div>
+
+      
+    </div>
+
+    <div data-tauri-drag-region class="titlebar">
+      <div class="right-titlebar">
+        <div class="titlebar-button" id="minimize">
+          <span class="material-symbols-outlined"  >
+             minimize
+          </span>
+        </div>
+        <div class="titlebar-button" id="maximise">
+          <span class="material-symbols-outlined"  >
+            check_box_outline_blank
+          </span>
+        </div>
+        <div class="titlebar-button" id="close">
+        </div>
+      </div>
+      <div class="logobar">
+        CAMILA
+      </div> 
+
+      <div class="left-titlebar">
+        
+        <div class="titlebar-button" id="more_options" >
+          <span class="material-symbols-outlined" >
+            more_vert
+          </span>
+        </div>
+        <div class="titlebar-button" id="help">
+          <span class="material-symbols-outlined"  >
+            help
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <main class="container" >
+      
+        <div class="container__top" > 
+          <div class="layer1 toolbox ">
+           
+              <div class="extra square__placeholder" id="brush">
+                <span class="material-symbols-outlined"  >
+                  brush
+                </span>
+              </div>
+             <div class="extra square__placeholder" id="line">
+                <span class="material-symbols-outlined"  >
+                  route
+                </span>
+              </div>
+              <div class="extra square__placeholder" id="zap">
+                <span class="material-symbols-outlined"  >
+                  bolt
+                </span>
+              </div>
+
+         
+          </div>
+          <div class="layer1 tool__settings ">
+              <div id="noTool">No Tool</div>
+              <div id="zapToolOptions">
+                <div>
+                <div  style="display: inline-flex; margin-left: 7px;"><div>Size: </div><div id="zap_size_view"> 3</div></div>
+                <input type="range" min="1" max="10" value="3" class="slider" id="zap_size_slider" >
+                </div>
+                <div>
+                <div style="display: inline-flex;margin-left: 7px;"><div>Weight: </div><div id="zap_weight_view"> 1</div></div>
+                <input  type="range" min="0" max="1" step="0.1" value="1" class="slider" id="zap_weight_slider">
+                </div>
+              </div > 
+              <div id="lineToolOptions">
+              <div>
+                <div style="display: inline-flex; margin-left: 7px;"><div>Size: </div><div id="line_size_view"> 3</div></div>
+                <input type="range" min="1" max="10" value="3" class="slider" id="line_size_slider">
+              </div>
+              <div>
+                <div style="display: inline-flex;margin-left: 7px;"><div>Weight: </div><div id="line_weight_view"> 1</div></div>
+                <input type="range" min="0" max="1" value="1" step="0.1"  class="slider" id="line_weight_slider">
+              </div>
+              </div >
+              <div id="brushToolOptions">
+              <div>
+                <div style="display: inline-flex; margin-left: 7px;"><div>Size: </div><div id="brush_size_view"> 3</div></div>
+                <input type="range" min="1" max="15" value="3" class="slider" id="brush_size_slider">
+              </div>
+              <div> 
+                <div style="display: inline-flex;margin-left: 7px;"><div>Weight: </div><div id="brush_weight_view"> 1</div></div>
+                <input type="range" min="0" max="1" value="1" step="0.1"  class="slider" id="brush_weight_slider">
+              </div>
+              </div>
+          </div>
+          <div class=" layer1 key__box">
+            <ul>
+              <li><div class="square__placeholder left" style="background-color: #B22222" ></div><div class="square__placeholder right"></div>
+              Input Node
+              </li>
+              <li><div class="square__placeholder left" style="background-color: #22B2B2;"></div><div class="square__placeholder right"></div>
+              Output Node
+              </li>
+              <li><div class="square__placeholder left" style="background-color: #2e2e2e ;"></div><div class="square__placeholder right"></div>
+              Mutable Node</li>
+              <li><div class="square__placeholder left" style="background-color: #E1AD01;"></div><div class="square__placeholder right"></div>
+              Signal
+              </li>
+              <li><div class="square__placeholder left" style="border-color:#B22222;border-width: 2px 0px 2px 2px; border-style:dashed;"></div><div class="square__placeholder right" style="border-color:#B22222;border-width: 2px; border-style:dashed;"></div>
+              Guideline:5 Squares
+              </li>
+              <li><div class="square__placeholder left" style="border-color:#2e2e2e;border-width: 2px 0px 2px 2px; border-style:solid;"></div><div class="square__placeholder right" style="border-color:#2e2e2e;border-width: 2px; border-style:solid;"></div>
+              Guideline: Grid
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="resizer" data-position="up"></div>
+        <div class="container__main" >
+          <canvas id="sandboxGrid">
+
+          </canvas>
+          </div>
+        <div class="resizer" data-position="down"></div>
+        <div class="container__bottom" >
+            <div class="tick__walkthrough__view">
+              <div class="view"></div>
+              <div class="bar"></div>
+            </div>
+            <div class="tick__walkthrough__control layer1">
+              <div class="left_controls ">
+                <div class="square__placeholder down" id="fastbackwards">
+                  <span class="material-symbols-outlined"  >
+                    fast_rewind
+                  </span>
+                </div>
+                <div style="display:inline-flex; margin-inline:5px;">
+                <div class="square__placeholder down" id="backwards">
+                  <span class="material-symbols-outlined"  >
+                    arrow_left
+                  </span>
+                </div>
+
+                <div class="square__placeholder down" id="play">
+                  <span class="material-symbols-outlined"  >
+                    play_arrow
+                  </span>
+                </div>
+                <div class="square__placeholder down" id="forwards">
+                  <span class="material-symbols-outlined"  >
+                    arrow_right
+                  </span>
+                </div>
+                </div>
+                
+                <div class="square__placeholder down" id="fastforwards">
+                  <span class="material-symbols-outlined"  >
+                    fast_forward
+                  </span>
+                </div>
+                
+              </div>
+              <div style="display:inline-flex; justify-content: center; background-color:#424141; border-radius: 2px; padding-inline: 6px; height: 25px;">
+                <div id="tickTextDescriptor" style="color:#FFFCF4;">Tick Speed:</div><div id="tickValue" style="color:#FFFCF4 ;"> <strong>0</strong></div>
+              </div>
+              <div class="right_controls ">
+                <div class="square__placeholder down" id="tick_remove">
+                  <span class="material-symbols-outlined"  >
+                    remove
+                  </span>
+                </div>
+                <div class="square__placeholder down" id="tick_add">
+                  <span class="material-symbols-outlined"  >
+                    add
+                  </span>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      <!--
+      <h1>Welcome to Tauri</h1>
+
+      <div class="row">
+        <a href="https://vitejs.dev" target="_blank">
+          <img src="/src/assets/vite.svg" class="logo vite" alt="Vite logo" />
+        </a>
+        <a href="https://tauri.app" target="_blank">
+          <img
+            src="/src/assets/tauri.svg"
+            class="logo tauri"
+            alt="Tauri logo"
+          />
+        </a>
+        <a href="https://www.typescriptlang.org/docs" target="_blank">
+          <img
+            src="/src/assets/typescript.svg"
+            class="logo typescript"
+            alt="typescript logo"
+          />
+        </a>
+      </div>
+      <p>Click on the Tauri logo to learn more about the framework</p>
+
+      <form class="row" id="greet-form">
+        <input id="greet-input" placeholder="Enter a name..." />
+        <button type="submit">Greet</button>
+      </form>
+      <p id="greet-msg"></p>
+      ...--> 
+    </main>
+  </body>
+</html>
