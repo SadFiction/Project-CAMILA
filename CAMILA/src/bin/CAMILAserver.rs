@@ -1,12 +1,19 @@
 
 use tokio::sync::mpsc;
 use std::time::Duration;
-use std::{error::Error, net::SocketAddr};
+use std::net::SocketAddr;
 
 use tokio::time::sleep;
 use tonic::transport::Server;
 use CAMILAlib::*;
 use CAMILAlib::{camila_command_service_mod, camila_get_response_service_mod};
+
+
+
+
+
+
+
 
 
 
@@ -21,15 +28,15 @@ async fn tick_signal(tx: mpsc::Sender<bool>,tick_speed: u64) -> () {
 }
   
 async fn main_loop(mut rx: mpsc::Receiver<bool>) -> (){
+    let mut tick_nr: u64 = 0;
 
     loop {
-        if !TICK_COMMAND_QUEUE.lock().await.is_empty() {
-
-            //Work on grid
-        }
-
-        if let Some(status) = rx.recv().await {
-            //Update 
+        
+        if let Some(_status) = rx.recv().await {
+            tick_nr += 1;
+            println!("Tick: {}", tick_nr);
+            CAMILAlib::CAMILA_GRID.lock().await.update().await;
+            
         }
     }
 }
@@ -54,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
         .serve(addr)
         .await?;
     
-    let (tx, mut rx) : (mpsc::Sender<bool>, mpsc::Receiver<bool>) = mpsc::channel(0);
+    let (tx, rx) : (mpsc::Sender<bool>, mpsc::Receiver<bool>) = mpsc::channel(0);
 
     tokio::join!(tick_signal(tx, 1000), main_loop(rx));
 

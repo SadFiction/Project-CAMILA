@@ -17,7 +17,7 @@ use std::sync::Arc;
 use once_cell::sync::Lazy;
 pub use proto::camila_commands_server::{CamilaCommands, CamilaCommandsServer};
 pub use proto::camila_get_response_server::{CamilaGetResponse, CamilaGetResponseServer};
-pub use proto::{camila_command, camila_response, CamilaCommand};
+pub use proto::{camila_command, camila_response, CamilaCommand, Cob, cob};
 pub use tonic::{Streaming, Request, Response};
 pub use tokio_stream::Stream;
 
@@ -32,6 +32,7 @@ type RequestStream<T> = tonic::Request<tonic::Streaming<T>>;
 
 pub mod camila_command_service_mod;
 pub mod camila_get_response_service_mod;
+pub mod camila_grid;
 
 const TEMP_QUEUE_SIZE: usize = 100;
 
@@ -41,6 +42,7 @@ pub static INDEPENDENT_COMMAND_QUEUE: Lazy<Arc<Mutex<Queue<camila_command::Comma
 
 pub static LOG_QUEUE: Lazy<Arc<Mutex<Queue<camila_response::Response>>>> = Lazy::new(|| Arc::new(Mutex::new(Queue::new(TEMP_QUEUE_SIZE))));
 
+pub static CAMILA_GRID: Lazy<Arc<Mutex<camila_grid::CamilaObject>>> = Lazy::new(|| Arc::new(Mutex::new(camila_grid::CamilaObject::new(500, 500))));
 
 pub trait QueueTypes{}
 impl QueueTypes for camila_command::Command{}

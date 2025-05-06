@@ -21,8 +21,8 @@ message COB{
             Grid grid = 28; 
 
             message Size_Of_Grid{
-                float size_x = 1;
-                float size_y = 2;
+                uint64 size_x = 1;
+                uint64 size_y = 2;
             }
 
             message Cell{
